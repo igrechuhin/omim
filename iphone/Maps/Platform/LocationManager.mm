@@ -194,6 +194,13 @@ static NSString * const kAlohalyticsLocationRequestAlwaysFailed = @"$locationAlw
 
 - (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error
 {
+  NSString * errorDescription = [NSString stringWithFormat:@"code: %@ domain: %@ description: %@ reason: %@ suggest: %@", @(error.code), error.domain, error.localizedDescription, error.localizedFailureReason, error.localizedRecoverySuggestion];
+  UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"Location error" message:errorDescription preferredStyle:UIAlertControllerStyleAlert];
+
+  UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {}];
+  [alert addAction:defaultAction];
+  [MapsAppDelegate.theApp.mapViewController presentViewController:alert animated:YES completion:nil];
+
   NSLog(@"locationManager failed with error: %ld, %@", (long)error.code, error.description);
   if (error.code == kCLErrorDenied)
   {
