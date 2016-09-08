@@ -1,4 +1,5 @@
 #import "MapsAppDelegate.h"
+#import <CoreSpotlight/CoreSpotlight.h>
 #import <CoreTelephony/CTTelephonyNetworkInfo.h>
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
 #import <Pushwoosh/PushNotificationManager.h>
@@ -21,6 +22,8 @@
 #import "Statistics.h"
 #import "UIColor+MapsMeColor.h"
 #import "UIFont+MapsMeFonts.h"
+#import "MWMSearch+CoreSpotlight.h"
+#import "MWMMapViewControlsManager.h"
 
 #import "3party/Alohalytics/src/alohalytics_objc.h"
 
@@ -658,6 +661,25 @@ using namespace osm_auth_ios;
   GetFramework().SetRenderingEnabled();
   [MWMLocationManager applicationDidBecomeActive];
   [MWMRouterSavedState restore];
+  [MWMSearch addCategoriesToSpotlight];
+}
+
+- (BOOL)application:(UIApplication *)application
+    continueUserActivity:(NSUserActivity *)userActivity
+      restorationHandler:(void (^)(NSArray * restorableObjects))restorationHandler
+{
+  if (![userActivity.activityType isEqualToString:CSSearchableItemActionType])
+    return NO;
+  NSString * searchString = userActivity.title;
+  if (!searchString)
+    return NO;
+
+  sleep(10);
+
+  [[MWMMapViewControlsManager manager] searchText:[searchString stringByAppendingString:@" "]
+                                   forInputLocale:[MWMSettings spotlightLocaleLanguageId]];
+
+  return YES;
 }
 
 - (void)dealloc
