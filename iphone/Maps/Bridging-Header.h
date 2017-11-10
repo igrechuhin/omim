@@ -33,6 +33,7 @@
 #import "MWMMapWidgetsHelper.h"
 #import "MWMNavigationDashboardEntity.h"
 #import "MWMNavigationDashboardManager.h"
+#import "MWMNetworkPolicyHelper.h"
 #import "MWMNoMapsViewController.h"
 #import "MWMPlacePageButtonsProtocol.h"
 #import "MWMPlacePageCellUpdateProtocol.h"
